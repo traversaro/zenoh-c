@@ -130,8 +130,8 @@ pub use crate::opaque_types::z_loaned_slice_t;
 pub use crate::opaque_types::z_owned_slice_t;
 pub use crate::opaque_types::z_view_slice_t;
 
-decl_transmute_owned!(CSlice, z_owned_slice_t);
-decl_transmute_owned!(custom_inplace_init CSlice, z_view_slice_t);
+decl_transmute_owned!(CSlice, z_owned_slice_t, z_moved_slice_t);
+decl_transmute_view!(CSlice, z_view_slice_t);
 decl_transmute_handle!(CSlice, z_loaned_slice_t);
 
 validate_equivalence!(z_owned_slice_t, z_loaned_slice_t);
@@ -304,8 +304,8 @@ pub use crate::opaque_types::z_loaned_string_t;
 pub use crate::opaque_types::z_owned_string_t;
 pub use crate::opaque_types::z_view_string_t;
 
-decl_transmute_owned!(custom_inplace_init CSlice, z_owned_string_t);
-decl_transmute_owned!(custom_inplace_init CSlice, z_view_string_t);
+decl_transmute_owned!(custom_inplace_init CSlice, z_owned_string_t, z_move_string_t);
+decl_transmute_view!(CSlice, z_view_string_t);
 decl_transmute_handle!(CSlice, z_loaned_string_t);
 
 validate_equivalence!(z_owned_string_t, z_loaned_string_t);
@@ -456,7 +456,11 @@ pub use crate::opaque_types::z_owned_slice_map_t;
 
 pub type ZHashMap = HashMap<CSlice, CSlice>;
 decl_transmute_handle!(HashMap<CSlice, CSlice>, z_loaned_slice_map_t);
-decl_transmute_owned!(Option<HashMap<CSlice, CSlice>>, z_owned_slice_map_t);
+decl_transmute_owned!(
+    Option<HashMap<CSlice, CSlice>>,
+    z_owned_slice_map_t,
+    z_move_slice_map_t
+);
 
 validate_equivalence!(z_owned_slice_map_t, z_loaned_slice_map_t);
 
@@ -596,7 +600,11 @@ pub use crate::opaque_types::z_owned_string_array_t;
 
 pub type ZVector = Vec<CSlice>;
 decl_transmute_handle!(Vec<CSlice>, z_loaned_string_array_t);
-decl_transmute_owned!(Option<Vec<CSlice>>, z_owned_string_array_t);
+decl_transmute_owned!(
+    Option<Vec<CSlice>>,
+    z_owned_string_array_t,
+    z_move_string_array_t
+);
 
 validate_equivalence!(z_owned_string_array_t, z_loaned_string_array_t);
 

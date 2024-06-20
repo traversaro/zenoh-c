@@ -18,7 +18,8 @@ use crate::{
 
 decl_transmute_owned!(
     Option<(Mutex<()>, Option<MutexGuard<'static, ()>>)>,
-    z_owned_mutex_t
+    z_owned_mutex_t,
+    z_moved_mutex_t
 );
 decl_transmute_handle!(
     (Mutex<()>, Option<MutexGuard<'static, ()>>),
@@ -113,7 +114,7 @@ pub unsafe extern "C" fn z_mutex_try_lock(this: &mut z_loaned_mutex_t) -> errors
 pub use crate::opaque_types::z_loaned_condvar_t;
 pub use crate::opaque_types::z_owned_condvar_t;
 
-decl_transmute_owned!(Option<Condvar>, z_owned_condvar_t);
+decl_transmute_owned!(Option<Condvar>, z_owned_condvar_t, z_moved_condvar_t);
 decl_transmute_handle!(Condvar, z_loaned_condvar_t);
 
 /// Constructs conditional variable.
@@ -195,7 +196,7 @@ pub unsafe extern "C" fn z_condvar_wait(
 
 pub use crate::opaque_types::z_owned_task_t;
 
-decl_transmute_owned!(Option<JoinHandle<()>>, z_owned_task_t);
+decl_transmute_owned!(Option<JoinHandle<()>>, z_owned_task_t, z_moved_task_t);
 
 #[repr(C)]
 #[derive(Clone, Copy)]

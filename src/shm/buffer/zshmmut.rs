@@ -24,7 +24,7 @@ use crate::{
     z_loaned_shm_mut_t, z_owned_shm_mut_t, z_owned_shm_t,
 };
 
-decl_transmute_owned!(Option<ZShmMut>, z_owned_shm_mut_t);
+decl_transmute_owned!(Option<ZShmMut>, z_owned_shm_mut_t, z_moved_shm_mut_t);
 
 decl_transmute_handle!(zshmmut, z_loaned_shm_mut_t);
 

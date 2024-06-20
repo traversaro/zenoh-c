@@ -71,7 +71,11 @@ pub extern "C" fn z_publisher_options_default(this: &mut z_publisher_options_t) 
 }
 
 pub use crate::opaque_types::z_owned_publisher_t;
-decl_transmute_owned!(Option<Publisher<'static>>, z_owned_publisher_t);
+decl_transmute_owned!(
+    Option<Publisher<'static>>,
+    z_owned_publisher_t,
+    z_moved_publisher_t
+);
 pub use crate::opaque_types::z_loaned_publisher_t;
 decl_transmute_handle!(Publisher<'static>, z_loaned_publisher_t);
 
@@ -289,7 +293,8 @@ pub extern "C" fn z_publisher_keyexpr(publisher: &z_loaned_publisher_t) -> &z_lo
 pub use crate::opaque_types::zcu_owned_matching_listener_t;
 decl_transmute_owned!(
     Option<MatchingListener<'static, DefaultHandler>>,
-    zcu_owned_matching_listener_t
+    zcu_owned_matching_listener_t,
+    zcu_moved_matching_listener_t
 );
 
 /// A struct that indicates if there exist Subscribers matching the Publisher's key expression.

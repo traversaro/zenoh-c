@@ -17,7 +17,8 @@ pub use crate::opaque_types::z_owned_fifo_handler_sample_t;
 
 decl_transmute_owned!(
     Option<flume::Receiver<Sample>>,
-    z_owned_fifo_handler_sample_t
+    z_owned_fifo_handler_sample_t,
+    z_moved_fifo_handler_sample_t
 );
 decl_transmute_handle!(flume::Receiver<Sample>, z_loaned_fifo_handler_sample_t);
 validate_equivalence!(
@@ -135,7 +136,8 @@ pub use crate::opaque_types::z_owned_ring_handler_sample_t;
 
 decl_transmute_owned!(
     Option<RingChannelHandler<Sample>>,
-    z_owned_ring_handler_sample_t
+    z_owned_ring_handler_sample_t,
+    z_moved_ring_handler_sample_t
 );
 decl_transmute_handle!(RingChannelHandler<Sample>, z_loaned_ring_handler_sample_t);
 validate_equivalence!(

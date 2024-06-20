@@ -49,7 +49,11 @@ pub enum CSHMLayout {
     DynamicThreadsafe(DynamicAllocLayoutThreadsafe),
 }
 
-decl_transmute_owned!(Option<CSHMLayout>, z_owned_alloc_layout_t);
+decl_transmute_owned!(
+    Option<CSHMLayout>,
+    z_owned_alloc_layout_t,
+    z_moved_alloc_layout_t
+);
 decl_transmute_handle!(CSHMLayout, z_loaned_alloc_layout_t);
 
 /// Creates a new Alloc Layout for SHM Provider

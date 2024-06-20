@@ -15,7 +15,11 @@ use zenoh::{
 pub use crate::opaque_types::z_loaned_fifo_handler_reply_t;
 pub use crate::opaque_types::z_owned_fifo_handler_reply_t;
 
-decl_transmute_owned!(Option<flume::Receiver<Reply>>, z_owned_fifo_handler_reply_t);
+decl_transmute_owned!(
+    Option<flume::Receiver<Reply>>,
+    z_owned_fifo_handler_reply_t,
+    z_moved_fifo_handler_reply_t
+);
 decl_transmute_handle!(flume::Receiver<Reply>, z_loaned_fifo_handler_reply_t);
 validate_equivalence!(z_owned_fifo_handler_reply_t, z_loaned_fifo_handler_reply_t);
 
@@ -127,7 +131,8 @@ pub use crate::opaque_types::z_owned_ring_handler_reply_t;
 
 decl_transmute_owned!(
     Option<RingChannelHandler<Reply>>,
-    z_owned_ring_handler_reply_t
+    z_owned_ring_handler_reply_t,
+    z_moved_ring_handler_reply_t
 );
 decl_transmute_handle!(RingChannelHandler<Reply>, z_loaned_ring_handler_reply_t);
 validate_equivalence!(z_owned_fifo_handler_reply_t, z_loaned_ring_handler_reply_t);

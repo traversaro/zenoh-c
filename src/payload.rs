@@ -24,7 +24,7 @@ use crate::errors::Z_ENULL;
 use crate::{z_loaned_shm_t, z_owned_shm_mut_t, z_owned_shm_t};
 
 pub use crate::opaque_types::z_owned_bytes_t;
-decl_transmute_owned!(ZBytes, z_owned_bytes_t);
+decl_transmute_owned!(ZBytes, z_owned_bytes_t, z_moved_bytes_t);
 
 /// The gravestone value for `z_owned_bytes_t`.
 #[no_mangle]
@@ -798,7 +798,11 @@ pub unsafe extern "C" fn z_bytes_reader_tell(this: &mut z_bytes_reader_t) -> i64
 pub use crate::opaque_types::z_loaned_bytes_writer_t;
 pub use crate::opaque_types::z_owned_bytes_writer_t;
 
-decl_transmute_owned!(Option<ZBytesWriter<'static>>, z_owned_bytes_writer_t);
+decl_transmute_owned!(
+    Option<ZBytesWriter<'static>>,
+    z_owned_bytes_writer_t,
+    z_moved_bytes_writer_t
+);
 decl_transmute_handle!(ZBytesWriter<'static>, z_loaned_bytes_writer_t);
 validate_equivalence!(z_loaned_bytes_writer_t, z_owned_bytes_writer_t);
 

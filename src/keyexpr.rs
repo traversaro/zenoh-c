@@ -35,8 +35,12 @@ use zenoh_protocol::core::key_expr::canon::Canonizable;
 
 pub use crate::opaque_types::z_owned_keyexpr_t;
 pub use crate::opaque_types::z_view_keyexpr_t;
-decl_transmute_owned!(Option<KeyExpr<'static>>, z_owned_keyexpr_t);
-decl_transmute_owned!(custom_inplace_init Option<KeyExpr<'static>>, z_view_keyexpr_t);
+decl_transmute_owned!(
+    Option<KeyExpr<'static>>,
+    z_owned_keyexpr_t,
+    z_moved_keyexpr_t
+);
+decl_transmute_view!(Option<KeyExpr<'static>>, z_view_keyexpr_t);
 
 /// Constructs an owned key expression in a gravestone state.
 #[no_mangle]

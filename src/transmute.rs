@@ -88,7 +88,7 @@ pub(crate) trait InplaceDefault: Default {
     }
 }
 
-// For types implementing Default, we can use provide default implementation of InplaceInit through InplaceInitDefault
+// For types implementing Default, we can use provide default implementation of InplaceInit through InplaceDefault
 impl<T: InplaceDefault> Inplace for T {
     fn empty(this: *mut std::mem::MaybeUninit<Self>) {
         InplaceDefault::default(this);
@@ -135,20 +135,40 @@ macro_rules! validate_equivalence {
     };
 }
 
+macro_rules! decl_move_wrapper {
+    ($c_type:ty, $move_wrapper_c_type:ident) => {
+        #[repr(C)]
+        pub struct $move_wrapper_c_type {
+            pub ptr: &'static mut $c_type,
+        }
+    };
+}
+
 #[macro_export]
 macro_rules! decl_transmute_owned {
-    ($zenoh_type:ty, $c_type:ty) => {
+    ($zenoh_type:ty, $c_type:ty, $move_wrapper_c_type:ident) => {
         impl $crate::transmute::InplaceDefault for $zenoh_type {}
-        decl_transmute_owned!(custom_inplace_init $zenoh_type, $c_type);
-
+        decl_transmute_owned!(custom_inplace_init $zenoh_type, $c_type, $move_wrapper_c_type);
     };
-    (custom_inplace_init $zenoh_type:ty, $c_type:ty) => {
+    (custom_inplace_init $zenoh_type:ty, $c_type:ty, $move_wrapper_c_type:ident) => {
         validate_equivalence!($zenoh_type, $c_type);
         impl_transmute_ref!($zenoh_type, $c_type);
         impl_transmute_ref!($c_type, $zenoh_type);
         impl_transmute_uninit_ptr!($zenoh_type, $c_type);
         impl_transmute_uninit_ptr!($c_type, $zenoh_type);
+        decl_move_wrapper!($c_type, $move_wrapper_c_type);
     }
+}
+
+#[macro_export]
+macro_rules! decl_transmute_view {
+    ($zenoh_type:ty, $c_type:ty) => {
+        validate_equivalence!($zenoh_type, $c_type);
+        impl_transmute_ref!($zenoh_type, $c_type);
+        impl_transmute_ref!($c_type, $zenoh_type);
+        impl_transmute_uninit_ptr!($zenoh_type, $c_type);
+        impl_transmute_uninit_ptr!($c_type, $zenoh_type);
+    };
 }
 
 #[macro_export]

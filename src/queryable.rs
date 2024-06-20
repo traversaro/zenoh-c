@@ -35,7 +35,11 @@ use zenoh::sample::{
 };
 
 pub use crate::opaque_types::z_owned_queryable_t;
-decl_transmute_owned!(Option<Queryable<'static, ()>>, z_owned_queryable_t);
+decl_transmute_owned!(
+    Option<Queryable<'static, ()>>,
+    z_owned_queryable_t,
+    z_moved_queryable_t
+);
 pub use crate::opaque_types::z_loaned_queryable_t;
 decl_transmute_handle!(Queryable<'static, ()>, z_loaned_queryable_t);
 validate_equivalence!(z_owned_queryable_t, z_loaned_queryable_t);
@@ -58,7 +62,7 @@ pub use crate::opaque_types::z_loaned_query_t;
 decl_transmute_handle!(Query, z_loaned_query_t);
 
 pub use crate::opaque_types::z_owned_query_t;
-decl_transmute_owned!(Option<Query>, z_owned_query_t);
+decl_transmute_owned!(Option<Query>, z_owned_query_t, z_moved_query_t);
 
 validate_equivalence!(z_owned_query_t, z_loaned_query_t);
 

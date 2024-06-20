@@ -64,7 +64,11 @@ impl From<z_reliability_t> for Reliability {
 
 pub use crate::opaque_types::z_loaned_subscriber_t;
 pub use crate::opaque_types::z_owned_subscriber_t;
-decl_transmute_owned!(Option<Subscriber<'static, ()>>, z_owned_subscriber_t);
+decl_transmute_owned!(
+    Option<Subscriber<'static, ()>>,
+    z_owned_subscriber_t,
+    z_moved_subscriber_t
+);
 decl_transmute_handle!(Subscriber<'static, ()>, z_loaned_subscriber_t);
 
 validate_equivalence!(z_owned_subscriber_t, z_loaned_subscriber_t);

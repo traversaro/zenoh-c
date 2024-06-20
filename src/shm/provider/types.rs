@@ -74,7 +74,11 @@ pub struct z_alloc_alignment_t {
 
 decl_transmute_copy!(AllocAlignment, z_alloc_alignment_t);
 
-decl_transmute_owned!(Option<MemoryLayout>, z_owned_memory_layout_t);
+decl_transmute_owned!(
+    Option<MemoryLayout>,
+    z_owned_memory_layout_t,
+    z_moved_memory_layout_t
+);
 decl_transmute_handle!(MemoryLayout, z_loaned_memory_layout_t);
 
 /// Creates a new Memory Layout
@@ -136,7 +140,11 @@ pub extern "C" fn z_memory_layout_get_data(
     out_alignment.write(layout.alignment().transmute_copy());
 }
 
-decl_transmute_owned!(Option<ChunkAllocResult>, z_owned_chunk_alloc_result_t);
+decl_transmute_owned!(
+    Option<ChunkAllocResult>,
+    z_owned_chunk_alloc_result_t,
+    z_moved_chunk_alloc_result_t
+);
 
 decl_transmute_handle!(ChunkAllocResult, z_loaned_chunk_alloc_result_t);
 
@@ -189,7 +197,11 @@ pub extern "C" fn z_chunk_alloc_result_drop(this: &mut z_owned_chunk_alloc_resul
     let _ = this.transmute_mut().take();
 }
 
-decl_transmute_owned!(Option<BufAllocResult>, z_owned_buf_alloc_result_t);
+decl_transmute_owned!(
+    Option<BufAllocResult>,
+    z_owned_buf_alloc_result_t,
+    z_moved_buf_alloc_result_t
+);
 
 decl_transmute_handle!(BufAllocResult, z_loaned_buf_alloc_result_t);
 

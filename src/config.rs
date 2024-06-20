@@ -68,8 +68,7 @@ pub static Z_CONFIG_ADD_TIMESTAMP_KEY: &c_char =
 pub use crate::opaque_types::z_loaned_config_t;
 decl_transmute_handle!(Config, z_loaned_config_t);
 pub use crate::opaque_types::z_owned_config_t;
-decl_transmute_owned!(Option<Config>, z_owned_config_t);
-
+decl_transmute_owned!(Option<Config>, z_owned_config_t, z_moved_config_t);
 validate_equivalence!(z_owned_config_t, z_loaned_config_t);
 
 /// Borrows config.

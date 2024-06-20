@@ -164,7 +164,7 @@ pub extern "C" fn z_sample_source_info(this: &z_loaned_sample_t) -> &z_loaned_so
 }
 
 pub use crate::opaque_types::z_owned_sample_t;
-decl_transmute_owned!(Option<Sample>, z_owned_sample_t);
+decl_transmute_owned!(Option<Sample>, z_owned_sample_t, z_moved_sample_t);
 
 /// Constructs an owned shallow copy of the sample (i.e. all modficiations applied to the copy, might be visible in the original) in provided uninitilized memory location.
 #[no_mangle]
@@ -225,7 +225,7 @@ validate_equivalence!(z_owned_sample_t, z_loaned_sample_t);
 pub use crate::opaque_types::z_loaned_encoding_t;
 decl_transmute_handle!(Encoding, z_loaned_encoding_t);
 pub use crate::opaque_types::z_owned_encoding_t;
-decl_transmute_owned!(Encoding, z_owned_encoding_t);
+decl_transmute_owned!(Encoding, z_owned_encoding_t, z_moved_encoding_t);
 
 validate_equivalence!(z_owned_encoding_t, z_loaned_encoding_t);
 
@@ -585,7 +585,7 @@ pub extern "C" fn z_entity_global_id_eid(this: &z_entity_global_id_t) -> u32 {
 pub use crate::opaque_types::z_loaned_source_info_t;
 decl_transmute_handle!(SourceInfo, z_loaned_source_info_t);
 pub use crate::opaque_types::z_owned_source_info_t;
-decl_transmute_owned!(SourceInfo, z_owned_source_info_t);
+decl_transmute_owned!(SourceInfo, z_owned_source_info_t, z_moved_source_info_t);
 
 validate_equivalence!(z_owned_source_info_t, z_loaned_source_info_t);
 

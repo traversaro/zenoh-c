@@ -16,7 +16,7 @@ use crate::transmute::{
     unwrap_ref_unchecked, Inplace, TransmuteFromHandle, TransmuteIntoHandle, TransmuteRef,
     TransmuteUninitPtr,
 };
-use crate::{errors, z_owned_config_t, zc_init_logger};
+use crate::{errors, z_moved_config_t, z_owned_config_t, zc_init_logger};
 use std::mem::MaybeUninit;
 use std::sync::Arc;
 use zenoh::core::Wait;
@@ -26,7 +26,7 @@ use zenoh::session::Session;
 use crate::z_loaned_shm_client_storage_t;
 
 use crate::opaque_types::z_owned_session_t;
-decl_transmute_owned!(Option<Arc<Session>>, z_owned_session_t);
+decl_transmute_owned!(Option<Arc<Session>>, z_owned_session_t, z_moved_session_t);
 
 use crate::opaque_types::z_loaned_session_t;
 decl_transmute_handle!(Arc<Session>, z_loaned_session_t);

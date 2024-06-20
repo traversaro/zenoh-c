@@ -29,7 +29,7 @@ use zenoh_protocol::core::{whatami::WhatAmIMatcher, WhatAmI};
 pub use crate::opaque_types::z_loaned_hello_t;
 pub use crate::opaque_types::z_owned_hello_t;
 
-decl_transmute_owned!(Option<Hello>, z_owned_hello_t);
+decl_transmute_owned!(Option<Hello>, z_owned_hello_t, z_moved_hello_t);
 decl_transmute_handle!(Hello, z_loaned_hello_t);
 
 validate_equivalence!(z_owned_hello_t, z_loaned_hello_t);

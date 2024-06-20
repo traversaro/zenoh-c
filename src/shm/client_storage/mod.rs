@@ -30,7 +30,8 @@ use super::common::types::z_protocol_id_t;
 
 decl_transmute_owned!(
     Option<Vec<(ProtocolID, Arc<dyn ShmClient>)>>,
-    zc_owned_shm_client_list_t
+    zc_owned_shm_client_list_t,
+    zc_moved_shm_client_list_t
 );
 
 decl_transmute_handle!(
@@ -101,7 +102,11 @@ pub extern "C" fn zc_shm_client_list_add_client(
     }
 }
 
-decl_transmute_owned!(Option<Arc<ShmClientStorage>>, z_owned_shm_client_storage_t);
+decl_transmute_owned!(
+    Option<Arc<ShmClientStorage>>,
+    z_owned_shm_client_storage_t,
+    z_moved_shm_client_storage_t
+);
 
 decl_transmute_handle!(Arc<ShmClientStorage>, z_loaned_shm_client_storage_t);
 

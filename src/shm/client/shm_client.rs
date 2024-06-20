@@ -42,7 +42,11 @@ pub struct zc_shm_client_callbacks_t {
     ) -> bool,
 }
 
-decl_transmute_owned!(Option<Arc<dyn ShmClient>>, z_owned_shm_client_t);
+decl_transmute_owned!(
+    Option<Arc<dyn ShmClient>>,
+    z_owned_shm_client_t,
+    z_moved_shm_client_t
+);
 
 #[derive(Debug)]
 pub struct DynamicShmClient {

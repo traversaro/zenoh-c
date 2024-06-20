@@ -34,7 +34,8 @@ use crate::opaque_types::zc_loaned_liveliness_token_t;
 use crate::opaque_types::zc_owned_liveliness_token_t;
 decl_transmute_owned!(
     Option<LivelinessToken<'static>>,
-    zc_owned_liveliness_token_t
+    zc_owned_liveliness_token_t,
+    z_moved_lveliness_token_t
 );
 decl_transmute_handle!(LivelinessToken<'static>, zc_loaned_liveliness_token_t);
 validate_equivalence!(zc_owned_liveliness_token_t, zc_loaned_liveliness_token_t);

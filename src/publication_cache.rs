@@ -56,7 +56,8 @@ pub use crate::opaque_types::ze_loaned_publication_cache_t;
 pub use crate::opaque_types::ze_owned_publication_cache_t;
 decl_transmute_owned!(
     Option<zenoh_ext::PublicationCache<'static>>,
-    ze_owned_publication_cache_t
+    ze_owned_publication_cache_t,
+    ze_moved_publication_cache_t
 );
 decl_transmute_handle!(
     zenoh_ext::PublicationCache<'static>,

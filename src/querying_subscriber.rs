@@ -45,7 +45,8 @@ use crate::opaque_types::ze_loaned_querying_subscriber_t;
 use crate::opaque_types::ze_owned_querying_subscriber_t;
 decl_transmute_owned!(
     Option<(zenoh_ext::FetchingSubscriber<'static, ()>, &'static Session)>,
-    ze_owned_querying_subscriber_t
+    ze_owned_querying_subscriber_t,
+    ze_moved_querying_subscriber_t
 );
 decl_transmute_handle!(
     (zenoh_ext::FetchingSubscriber<'static, ()>, &'static Session),

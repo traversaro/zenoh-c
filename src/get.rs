@@ -74,7 +74,7 @@ impl From<&ReplyError> for &ReplyErrorNewtype {
 }
 
 pub use crate::opaque_types::z_owned_reply_err_t;
-decl_transmute_owned!(ReplyErrorNewtype, z_owned_reply_err_t);
+decl_transmute_owned!(ReplyErrorNewtype, z_owned_reply_err_t, z_moved_reply_err_t);
 pub use crate::opaque_types::z_loaned_reply_err_t;
 decl_transmute_handle!(ReplyErrorNewtype, z_loaned_reply_err_t);
 
@@ -116,7 +116,7 @@ pub extern "C" fn z_reply_err_drop(this: &mut z_owned_reply_err_t) {
 }
 
 pub use crate::opaque_types::z_owned_reply_t;
-decl_transmute_owned!(Option<Reply>, z_owned_reply_t);
+decl_transmute_owned!(Option<Reply>, z_owned_reply_t, z_moved_owned_reply_t);
 pub use crate::opaque_types::z_loaned_reply_t;
 decl_transmute_handle!(Reply, z_loaned_reply_t);
 

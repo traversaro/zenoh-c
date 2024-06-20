@@ -51,7 +51,11 @@ pub enum CSHMProvider {
     DynamicThreadsafe(DynamicShmProviderThreadsafe),
 }
 
-decl_transmute_owned!(Option<CSHMProvider>, z_owned_shm_provider_t);
+decl_transmute_owned!(
+    Option<CSHMProvider>,
+    z_owned_shm_provider_t,
+    z_moved_shm_provider_t
+);
 decl_transmute_handle!(CSHMProvider, z_loaned_shm_provider_t);
 
 /// Creates a new SHM Provider
