@@ -1169,7 +1169,7 @@ pub fn generate_generic_c_move_macro(macro_func: &[FunctionSignature]) -> String
         let z_moved_type = &func.return_type.typename;
         let z_owned_type = &func.args[0].typename.typename;
         out += ", \\\n";
-        out += &format!("        {z_owned_type} : ({z_moved_type}){{&#x}}");
+        out += &format!("        {z_owned_type} : ({z_moved_type}){{({z_owned_type}*)&x}}");
     }
     out += " \\\n";
     out += "    )";
