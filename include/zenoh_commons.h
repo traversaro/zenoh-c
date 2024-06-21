@@ -2233,7 +2233,7 @@ z_error_t z_mutex_unlock(struct z_loaned_mutex_t *this_);
  */
 ZENOHC_API
 z_error_t z_open(struct z_owned_session_t *this_,
-                 struct z_owned_config_t *config);
+                 z_moved_config_t config);
 /**
  * Constructs and opens a new Zenoh session with specified client storage.
  *

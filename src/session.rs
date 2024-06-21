@@ -54,13 +54,13 @@ pub extern "C" fn z_session_null(this: *mut MaybeUninit<z_owned_session_t>) {
 #[no_mangle]
 pub extern "C" fn z_open(
     this: *mut MaybeUninit<z_owned_session_t>,
-    config: &mut z_owned_config_t,
+    config: z_moved_config_t,
 ) -> errors::z_error_t {
     let this = this.transmute_uninit_ptr();
     if cfg!(feature = "logger-autoinit") {
         zc_init_logger();
     }
-    let config = match config.transmute_mut().extract() {
+    let config = match config.ptr.transmute_mut().extract() {
         Some(c) => c,
         None => {
             log::error!("Config not provided");
