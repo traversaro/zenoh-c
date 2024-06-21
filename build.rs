@@ -1032,10 +1032,11 @@ pub fn make_move_macros(path_in: &str) -> Vec<FunctionSignature> {
         re.captures_iter(&bindings).map(|c| c.extract())
     {
         let z_moved_type = "z_moved_".to_string() + arg_type_suffix;
+        let z_owned_type = "z_owned_".to_string() + arg_type_suffix;
         let f = FunctionSignature {
             return_type: Ctype::new(&z_moved_type),
             func_name: func_name_prefix.to_string() + "_move",
-            args: vec![FuncArg::new("", arg_name)],
+            args: vec![FuncArg::new(&z_owned_type, arg_name)],
         };
         res.push(f);
     }
@@ -1216,11 +1217,12 @@ pub fn generate_generic_move_c(macro_func: &[FunctionSignature]) -> String {
     let mut out = String::new();
     for sig in macro_func {
         out += &format!(
-            "#define {}(x) ({}){{x}}",
+            "#define {}(x) ({}){{x}}\n",
             sig.func_name, sig.return_type.typename
         );
     }
-    generate_generic_c(macro_func, "z_move", true)
+    out += generate_generic_c(macro_func, "z_move", true).as_str();
+    out
 }
 
 pub fn generate_generic_null_c(macro_func: &[FunctionSignature]) -> String {
