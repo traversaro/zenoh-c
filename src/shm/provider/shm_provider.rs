@@ -120,7 +120,7 @@ pub extern "C" fn z_shm_provider_loan(this: &z_owned_shm_provider_t) -> &z_loane
 
 /// Deletes SHM Provider
 #[no_mangle]
-pub extern "C" fn z_shm_provider_drop(this: &mut z_owned_shm_provider_t) {
+pub extern "C" fn z_shm_provider_drop(this: z_moved_shm_provider_t) {
     let _ = this.transmute_mut().take();
 }
 

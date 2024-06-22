@@ -78,7 +78,7 @@ pub extern "C" fn z_closure_query_call(
 }
 /// Drops the closure, resetting it to its gravestone state.
 #[no_mangle]
-pub extern "C" fn z_closure_query_drop(closure: &mut z_owned_closure_query_t) {
+pub extern "C" fn z_closure_query_drop(closure: z_moved_closure_query_t) {
     let mut empty_closure = z_owned_closure_query_t::empty();
     std::mem::swap(&mut empty_closure, closure);
 }
@@ -161,7 +161,7 @@ pub extern "C" fn z_closure_owned_query_null() -> z_owned_closure_owned_query_t 
 #[no_mangle]
 pub extern "C" fn z_closure_owned_query_call(
     closure: &z_loaned_closure_owned_query_t,
-    query: &mut z_owned_query_t,
+    query: z_moved_query_t,
 ) {
     match closure.transmute_ref().call {
         Some(call) => call(query, closure.transmute_ref().context),
@@ -170,7 +170,7 @@ pub extern "C" fn z_closure_owned_query_call(
 }
 /// Drops the closure. Droping an uninitialized closure is a no-op.
 #[no_mangle]
-pub extern "C" fn z_closure_owned_query_drop(closure: &mut z_owned_closure_owned_query_t) {
+pub extern "C" fn z_closure_owned_query_drop(closure: z_moved_closure_owned_query_t) {
     let mut empty_closure = z_owned_closure_owned_query_t::empty();
     std::mem::swap(&mut empty_closure, closure);
 }

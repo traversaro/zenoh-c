@@ -25,7 +25,7 @@ validate_equivalence!(z_owned_fifo_handler_query_t, z_loaned_fifo_handler_query_
 
 /// Drops the handler and resets it to a gravestone state.
 #[no_mangle]
-pub extern "C" fn z_fifo_handler_query_drop(this: &mut z_owned_fifo_handler_query_t) {
+pub extern "C" fn z_fifo_handler_query_drop(this: z_moved_fifo_handler_query_t) {
     Inplace::drop(this.transmute_mut());
 }
 
@@ -139,8 +139,8 @@ validate_equivalence!(z_owned_fifo_handler_query_t, z_loaned_ring_handler_query_
 
 /// Drops the handler and resets it to a gravestone state.
 #[no_mangle]
-pub extern "C" fn z_ring_handler_query_drop(this: &mut z_owned_ring_handler_query_t) {
-    Inplace::drop(this.transmute_mut());
+pub extern "C" fn z_ring_handler_query_drop(this: z_moved_ring_handler_query_t) {
+    Inplace::drop(this.ptr.transmute_mut());
 }
 
 /// Constructs a handler in gravestone state.

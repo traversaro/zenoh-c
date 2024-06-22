@@ -197,7 +197,7 @@ pub extern "C" fn z_publisher_put_options_default(this: &mut z_publisher_put_opt
 #[allow(clippy::missing_safety_doc)]
 pub unsafe extern "C" fn z_publisher_put(
     this: &z_loaned_publisher_t,
-    payload: &mut z_owned_bytes_t,
+    payload: z_moved_bytes_t,
     options: Option<&mut z_publisher_put_options_t>,
 ) -> errors::z_error_t {
     let publisher = this.transmute_ref();
@@ -366,7 +366,7 @@ pub extern "C" fn zcu_publisher_matching_listener_undeclare(
 /// @return 0 in case of success, negative error code otherwise.
 #[no_mangle]
 #[allow(clippy::missing_safety_doc)]
-pub extern "C" fn z_undeclare_publisher(this: &mut z_owned_publisher_t) -> errors::z_error_t {
+pub extern "C" fn z_undeclare_publisher(this: z_moved_publisher_t) -> errors::z_error_t {
     if let Some(p) = this.transmute_mut().extract().take() {
         if let Err(e) = p.undeclare().wait() {
             log::error!("{}", e);
@@ -379,6 +379,6 @@ pub extern "C" fn z_undeclare_publisher(this: &mut z_owned_publisher_t) -> error
 /// Frees memory and resets publisher to its gravestone state. Also attempts undeclare publisher.
 #[no_mangle]
 #[allow(clippy::missing_safety_doc)]
-pub extern "C" fn z_publisher_drop(this: &mut z_owned_publisher_t) {
+pub extern "C" fn z_publisher_drop(this: z_moved_publisher_t) {
     z_undeclare_publisher(this);
 }

@@ -207,7 +207,7 @@ pub unsafe extern "C" fn zc_config_insert_json_from_substring(
 /// Frees `config`, and resets it to its gravestone state.
 #[no_mangle]
 #[allow(clippy::missing_safety_doc)]
-pub extern "C" fn z_config_drop(this: &mut z_owned_config_t) {
+pub extern "C" fn z_config_drop(this: z_moved_config_t) {
     let config = this.transmute_mut();
     Inplace::drop(config);
 }

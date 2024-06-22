@@ -79,7 +79,7 @@ pub extern "C" fn z_closure_zid_call(closure: &z_loaned_closure_zid_t, z_id: &z_
 }
 /// Drops the closure, resetting it to its gravestone state. Droping an uninitialized (null) closure is a no-op.
 #[no_mangle]
-pub extern "C" fn z_closure_zid_drop(closure: &mut z_owned_closure_zid_t) {
+pub extern "C" fn z_closure_zid_drop(closure: z_moved_closure_zid_t) {
     let mut empty_closure = z_owned_closure_zid_t::empty();
     std::mem::swap(&mut empty_closure, closure);
 }

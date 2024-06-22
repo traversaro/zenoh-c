@@ -939,7 +939,7 @@ ZENOHC_API bool z_alloc_layout_check(const struct z_owned_alloc_layout_t *this_)
  * Deletes Alloc Layout
  */
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
-ZENOHC_API void z_alloc_layout_drop(struct z_owned_alloc_layout_t *this_);
+ZENOHC_API void z_alloc_layout_drop(z_moved_alloc_layout_t this_);
 #endif
 /**
  * Borrows Alloc Layout
@@ -982,7 +982,7 @@ ZENOHC_API bool z_buf_alloc_result_check(const struct z_owned_buf_alloc_result_t
  * Deletes Buf Alloc Result
  */
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
-ZENOHC_API void z_buf_alloc_result_drop(struct z_owned_buf_alloc_result_t *this_);
+ZENOHC_API void z_buf_alloc_result_drop(z_moved_buf_alloc_result_t this_);
 #endif
 /**
  * Borrows Buf Alloc Result
@@ -999,7 +999,7 @@ ZENOHC_API void z_buf_alloc_result_null(struct z_owned_buf_alloc_result_t *this_
 #endif
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
 ZENOHC_API
-z_error_t z_buf_alloc_result_unwrap(struct z_owned_buf_alloc_result_t *alloc_result,
+z_error_t z_buf_alloc_result_unwrap(z_moved_buf_alloc_result_t alloc_result,
                                     struct z_owned_shm_mut_t *out_buf,
                                     enum z_alloc_error_t *out_error);
 #endif
@@ -1153,7 +1153,7 @@ z_error_t z_bytes_deserialize_into_uint8(const struct z_loaned_bytes_t *this_,
  * Drops `this_`, resetting it to gravestone value. If there are any shallow copies
  * created by `z_bytes_clone()`, they would still stay valid.
  */
-ZENOHC_API void z_bytes_drop(struct z_owned_bytes_t *this_);
+ZENOHC_API void z_bytes_drop(z_moved_bytes_t this_);
 /**
  * Constructs an empty instance of `z_owned_bytes_t`.
  */
@@ -1280,15 +1280,13 @@ z_error_t z_bytes_serialize_from_iter(struct z_owned_bytes_t *this_,
  */
 ZENOHC_API
 z_error_t z_bytes_serialize_from_pair(struct z_owned_bytes_t *this_,
-                                      struct z_owned_bytes_t *first,
-                                      struct z_owned_bytes_t *second);
+                                      z_moved_bytes_t first,
+                                      z_moved_bytes_t second);
 /**
  * Serializes from an immutable SHM buffer consuming it
  */
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
-ZENOHC_API
-z_error_t z_bytes_serialize_from_shm(struct z_owned_bytes_t *this_,
-                                     struct z_owned_shm_t *shm);
+ZENOHC_API z_error_t z_bytes_serialize_from_shm(struct z_owned_bytes_t *this_, z_moved_shm_t shm);
 #endif
 /**
  * Serializes from an immutable SHM buffer copying it
@@ -1304,7 +1302,7 @@ void z_bytes_serialize_from_shm_copy(struct z_owned_bytes_t *this_,
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
 ZENOHC_API
 z_error_t z_bytes_serialize_from_shm_mut(struct z_owned_bytes_t *this_,
-                                         struct z_owned_shm_mut_t *shm);
+                                         z_moved_shm_mut_t shm);
 #endif
 /**
  * Serializes a slice by aliasing.
@@ -1363,7 +1361,7 @@ ZENOHC_API bool z_bytes_writer_check(const struct z_owned_bytes_writer_t *this_)
 /**
  * Drops `this_`, resetting it to gravestone value.
  */
-ZENOHC_API void z_bytes_writer_drop(struct z_owned_bytes_writer_t *this_);
+ZENOHC_API void z_bytes_writer_drop(z_moved_bytes_writer_t this_);
 /**
  * Borrows writer.
  */
@@ -1397,7 +1395,7 @@ ZENOHC_API bool z_chunk_alloc_result_check(const struct z_owned_chunk_alloc_resu
  * Deletes Chunk Alloc Result
  */
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
-ZENOHC_API void z_chunk_alloc_result_drop(struct z_owned_chunk_alloc_result_t *this_);
+ZENOHC_API void z_chunk_alloc_result_drop(z_moved_chunk_alloc_result_t this_);
 #endif
 /**
  * Borrows Chunk Alloc Result
@@ -1451,7 +1449,7 @@ ZENOHC_API struct z_clock_t z_clock_now(void);
  * the remaining reference count (number of shallow copies) of the session otherwise, saturating at i8::MAX.
  */
 ZENOHC_API
-z_error_t z_close(struct z_owned_session_t *this_);
+z_error_t z_close(z_moved_session_t this_);
 /**
  * Calls the closure. Calling an uninitialized closure is a no-op.
  */
@@ -1465,7 +1463,7 @@ ZENOHC_API bool z_closure_hello_check(const struct z_owned_closure_hello_t *this
 /**
  * Drops the closure. Droping an uninitialized closure is a no-op.
  */
-ZENOHC_API void z_closure_hello_drop(struct z_owned_closure_hello_t *closure);
+ZENOHC_API void z_closure_hello_drop(z_moved_closure_hello_t closure);
 /**
  * Borrows closure.
  */
@@ -1480,11 +1478,11 @@ ZENOHC_API void z_closure_hello_null(struct z_owned_closure_hello_t *this_);
  */
 ZENOHC_API
 void z_closure_owned_query_call(const struct z_loaned_closure_owned_query_t *closure,
-                                struct z_owned_query_t *query);
+                                z_moved_query_t query);
 /**
  * Drops the closure. Droping an uninitialized closure is a no-op.
  */
-ZENOHC_API void z_closure_owned_query_drop(struct z_owned_closure_owned_query_t *closure);
+ZENOHC_API void z_closure_owned_query_drop(z_moved_closure_owned_query_t closure);
 /**
  * Borrows closure.
  */
@@ -1507,7 +1505,7 @@ ZENOHC_API bool z_closure_query_check(const struct z_owned_closure_query_t *this
 /**
  * Drops the closure, resetting it to its gravestone state.
  */
-ZENOHC_API void z_closure_query_drop(struct z_owned_closure_query_t *closure);
+ZENOHC_API void z_closure_query_drop(z_moved_closure_query_t closure);
 /**
  * Borrows closure.
  */
@@ -1531,7 +1529,7 @@ ZENOHC_API bool z_closure_reply_check(const struct z_owned_closure_reply_t *this
  * Drops the closure, resetting it to its gravestone state. Droping an uninitialized closure is a no-op.
  */
 ZENOHC_API
-void z_closure_reply_drop(struct z_owned_closure_reply_t *closure);
+void z_closure_reply_drop(z_moved_closure_reply_t closure);
 /**
  * Borrows closure.
  */
@@ -1554,7 +1552,7 @@ ZENOHC_API bool z_closure_sample_check(const struct z_owned_closure_sample_t *th
 /**
  * Drops the closure. Droping an uninitialized closure is a no-op.
  */
-ZENOHC_API void z_closure_sample_drop(struct z_owned_closure_sample_t *closure);
+ZENOHC_API void z_closure_sample_drop(z_moved_closure_sample_t closure);
 /**
  * Borrows closure.
  */
@@ -1578,7 +1576,7 @@ ZENOHC_API bool z_closure_zid_check(const struct z_owned_closure_zid_t *this_);
  * Drops the closure, resetting it to its gravestone state. Droping an uninitialized (null) closure is a no-op.
  */
 ZENOHC_API
-void z_closure_zid_drop(struct z_owned_closure_zid_t *closure);
+void z_closure_zid_drop(z_moved_closure_zid_t closure);
 /**
  * Vorrows closure.
  */
@@ -1595,7 +1593,7 @@ ZENOHC_API bool z_condvar_check(const struct z_owned_condvar_t *this_);
 /**
  * Drops conditional variable.
  */
-ZENOHC_API void z_condvar_drop(struct z_owned_condvar_t *this_);
+ZENOHC_API void z_condvar_drop(z_moved_condvar_t this_);
 /**
  * Constructs conditional variable.
  */
@@ -1654,7 +1652,7 @@ ZENOHC_API void z_config_default(struct z_owned_config_t *this_);
 /**
  * Frees `config`, and resets it to its gravestone state.
  */
-ZENOHC_API void z_config_drop(struct z_owned_config_t *this_);
+ZENOHC_API void z_config_drop(z_moved_config_t this_);
 /**
  * Borrows config.
  */
@@ -1717,7 +1715,7 @@ ZENOHC_API
 z_error_t z_declare_queryable(struct z_owned_queryable_t *this_,
                               const struct z_loaned_session_t *session,
                               const struct z_loaned_keyexpr_t *key_expr,
-                              struct z_owned_closure_query_t *callback,
+                              z_moved_closure_query_t callback,
                               struct z_queryable_options_t *options);
 /**
  * Constructs and declares a subscriber for a given key expression. Dropping subscriber
@@ -1734,7 +1732,7 @@ ZENOHC_API
 z_error_t z_declare_subscriber(struct z_owned_subscriber_t *this_,
                                const struct z_loaned_session_t *session,
                                const struct z_loaned_keyexpr_t *key_expr,
-                               struct z_owned_closure_sample_t *callback,
+                               z_moved_closure_sample_t callback,
                                struct z_subscriber_options_t *options);
 /**
  * Sends request to delete data on specified key expression (used when working with <a href="https://zenoh.io/docs/manual/abstractions/#storage"> Zenoh storages </a>).
@@ -1760,7 +1758,7 @@ ZENOHC_API bool z_encoding_check(const struct z_owned_encoding_t *this_);
 /**
  * Frees the memory and resets the encoding it to its default value.
  */
-ZENOHC_API void z_encoding_drop(struct z_owned_encoding_t *this_);
+ZENOHC_API void z_encoding_drop(z_moved_encoding_t this_);
 /**
  * Constructs a `z_owned_encoding_t` from a specified string.
  */
@@ -1837,7 +1835,7 @@ ZENOHC_API bool z_fifo_handler_query_check(const struct z_owned_fifo_handler_que
 /**
  * Drops the handler and resets it to a gravestone state.
  */
-ZENOHC_API void z_fifo_handler_query_drop(struct z_owned_fifo_handler_query_t *this_);
+ZENOHC_API void z_fifo_handler_query_drop(z_moved_fifo_handler_query_t this_);
 /**
  * Borrows handler.
  */
@@ -1869,7 +1867,7 @@ ZENOHC_API bool z_fifo_handler_reply_check(const struct z_owned_fifo_handler_rep
 /**
  * Drops the handler and resets it to a gravestone state.
  */
-ZENOHC_API void z_fifo_handler_reply_drop(struct z_owned_fifo_handler_reply_t *this_);
+ZENOHC_API void z_fifo_handler_reply_drop(z_moved_fifo_handler_reply_t this_);
 /**
  * Borrows handler.
  */
@@ -1901,7 +1899,7 @@ ZENOHC_API bool z_fifo_handler_sample_check(const struct z_owned_fifo_handler_sa
 /**
  * Drops the handler and resets it to a gravestone state.
  */
-ZENOHC_API void z_fifo_handler_sample_drop(struct z_owned_fifo_handler_sample_t *this_);
+ZENOHC_API void z_fifo_handler_sample_drop(z_moved_fifo_handler_sample_t this_);
 /**
  * Borrows handler.
  */
@@ -1942,7 +1940,7 @@ ZENOHC_API
 z_error_t z_get(const struct z_loaned_session_t *session,
                 const struct z_loaned_keyexpr_t *key_expr,
                 const char *parameters,
-                struct z_owned_closure_reply_t *callback,
+                z_moved_closure_reply_t callback,
                 struct z_get_options_t *options);
 /**
  * Constructs default `z_get_options_t`
@@ -1955,7 +1953,7 @@ ZENOHC_API bool z_hello_check(const struct z_owned_hello_t *this_);
 /**
  * Frees memory and resets hello message to its gravestone state.
  */
-ZENOHC_API void z_hello_drop(struct z_owned_hello_t *this_);
+ZENOHC_API void z_hello_drop(z_moved_hello_t this_);
 /**
  * Borrows hello message.
  */
@@ -1990,7 +1988,7 @@ ZENOHC_API struct z_id_t z_hello_zid(const struct z_loaned_hello_t *this_);
  */
 ZENOHC_API
 z_error_t z_info_peers_zid(const struct z_loaned_session_t *session,
-                           struct z_owned_closure_zid_t *callback);
+                           z_moved_closure_zid_t callback);
 /**
  * Fetches the Zenoh IDs of all connected routers.
  *
@@ -2001,7 +1999,7 @@ z_error_t z_info_peers_zid(const struct z_loaned_session_t *session,
  */
 ZENOHC_API
 z_error_t z_info_routers_zid(const struct z_loaned_session_t *session,
-                             struct z_owned_closure_zid_t *callback);
+                             z_moved_closure_zid_t callback);
 /**
  * Returns the session's Zenoh ID.
  *
@@ -2056,7 +2054,7 @@ z_error_t z_keyexpr_concat(struct z_owned_keyexpr_t *this_,
 /**
  * Frees key expression and resets it to its gravestone state.
  */
-ZENOHC_API void z_keyexpr_drop(struct z_owned_keyexpr_t *this_);
+ZENOHC_API void z_keyexpr_drop(z_moved_keyexpr_t this_);
 /**
  * Returns ``true`` if both ``left`` and ``right`` are equal, ``false`` otherwise.
  */
@@ -2156,7 +2154,7 @@ ZENOHC_API bool z_memory_layout_check(const struct z_owned_memory_layout_t *this
  * Deletes Memory Layout
  */
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
-ZENOHC_API void z_memory_layout_drop(struct z_owned_memory_layout_t *this_);
+ZENOHC_API void z_memory_layout_drop(z_moved_memory_layout_t this_);
 #endif
 /**
  * Deletes Memory Layout
@@ -2196,7 +2194,7 @@ ZENOHC_API bool z_mutex_check(const struct z_owned_mutex_t *this_);
 /**
  * Drops mutex and resets it to its gravestone state.
  */
-ZENOHC_API void z_mutex_drop(struct z_owned_mutex_t *this_);
+ZENOHC_API void z_mutex_drop(z_moved_mutex_t this_);
 /**
  * Constructs a mutex.
  * @return 0 in case of success, negative error code otherwise.
@@ -2242,7 +2240,7 @@ z_error_t z_open(struct z_owned_session_t *this_,
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
 ZENOHC_API
 z_error_t z_open_with_custom_shm_clients(struct z_owned_session_t *this_,
-                                         struct z_owned_config_t *config,
+                                         z_moved_config_t config,
                                          const struct z_loaned_shm_client_storage_t *shm_clients);
 #endif
 /**
@@ -2282,7 +2280,7 @@ ZENOHC_API void z_publisher_delete_options_default(struct z_publisher_delete_opt
 /**
  * Frees memory and resets publisher to its gravestone state. Also attempts undeclare publisher.
  */
-ZENOHC_API void z_publisher_drop(struct z_owned_publisher_t *this_);
+ZENOHC_API void z_publisher_drop(z_moved_publisher_t this_);
 /**
  * Returns the ID of the publisher.
  */
@@ -2324,7 +2322,7 @@ ZENOHC_API void z_publisher_options_default(struct z_publisher_options_t *this_)
  */
 ZENOHC_API
 z_error_t z_publisher_put(const struct z_loaned_publisher_t *this_,
-                          struct z_owned_bytes_t *payload,
+                          z_moved_bytes_t payload,
                           struct z_publisher_put_options_t *options);
 /**
  * Constructs the default value for `z_publisher_put_options_t`.
@@ -2343,7 +2341,7 @@ ZENOHC_API void z_publisher_put_options_default(struct z_publisher_put_options_t
 ZENOHC_API
 z_error_t z_put(const struct z_loaned_session_t *session,
                 const struct z_loaned_keyexpr_t *key_expr,
-                struct z_owned_bytes_t *payload,
+                z_moved_bytes_t payload,
                 struct z_put_options_t *options);
 /**
  * Constructs the default value for `z_put_options_t`.
@@ -2403,7 +2401,7 @@ ZENOHC_API struct z_query_consolidation_t z_query_consolidation_none(void);
 /**
  * Destroys the query resetting it to its gravestone value.
  */
-ZENOHC_API void z_query_drop(struct z_owned_query_t *this_);
+ZENOHC_API void z_query_drop(z_moved_query_t this_);
 /**
  * Gets query <a href="https://github.com/eclipse-zenoh/roadmap/blob/main/rfcs/ALL/Query%20Payload.md">payload encoding</a>.
  *
@@ -2454,7 +2452,7 @@ const struct z_loaned_bytes_t *z_query_payload(const struct z_loaned_query_t *th
 ZENOHC_API
 z_error_t z_query_reply(const struct z_loaned_query_t *this_,
                         const struct z_loaned_keyexpr_t *key_expr,
-                        struct z_owned_bytes_t *payload,
+                        z_moved_bytes_t payload,
                         struct z_query_reply_options_t *options);
 /**
  * Sends a delete reply to a query.
@@ -2494,7 +2492,7 @@ ZENOHC_API void z_query_reply_del_options_default(struct z_query_reply_del_optio
  */
 ZENOHC_API
 z_error_t z_query_reply_err(const struct z_loaned_query_t *this_,
-                            struct z_owned_bytes_t *payload,
+                            z_moved_bytes_t payload,
                             struct z_query_reply_err_options_t *options);
 /**
  * Constructs the default value for `z_query_reply_err_options_t`.
@@ -2515,7 +2513,7 @@ ZENOHC_API bool z_queryable_check(const struct z_owned_queryable_t *this_);
 /**
  * Frees memory and resets it to its gravesztone state. Will also attempt to undeclare queryable.
  */
-ZENOHC_API void z_queryable_drop(struct z_owned_queryable_t *this_);
+ZENOHC_API void z_queryable_drop(z_moved_queryable_t this_);
 ZENOHC_API
 const struct z_loaned_queryable_t *z_queryable_loan(const struct z_owned_queryable_t *this_);
 /**
@@ -2560,7 +2558,7 @@ ZENOHC_API void z_reply_clone(const struct z_loaned_reply_t *this_, struct z_own
 /**
  * Frees reply, resetting it to its gravestone state.
  */
-ZENOHC_API void z_reply_drop(struct z_owned_reply_t *this_);
+ZENOHC_API void z_reply_drop(z_moved_reply_t this_);
 /**
  * Yields the contents of the reply by asserting it indicates a failure.
  *
@@ -2574,7 +2572,7 @@ ZENOHC_API bool z_reply_err_check(const struct z_owned_reply_err_t *this_);
 /**
  * Frees the memory and resets the reply error it to its default value.
  */
-ZENOHC_API void z_reply_err_drop(struct z_owned_reply_err_t *this_);
+ZENOHC_API void z_reply_err_drop(z_moved_reply_err_t this_);
 /**
  * Returns reply error encoding.
  */
@@ -2646,7 +2644,7 @@ ZENOHC_API bool z_ring_handler_query_check(const struct z_owned_ring_handler_que
 /**
  * Drops the handler and resets it to a gravestone state.
  */
-ZENOHC_API void z_ring_handler_query_drop(struct z_owned_ring_handler_query_t *this_);
+ZENOHC_API void z_ring_handler_query_drop(z_moved_ring_handler_query_t this_);
 /**
  * Borrows handler.
  */
@@ -2678,7 +2676,7 @@ ZENOHC_API bool z_ring_handler_reply_check(const struct z_owned_ring_handler_rep
 /**
  * Drops the handler and resets it to a gravestone state.
  */
-ZENOHC_API void z_ring_handler_reply_drop(struct z_owned_ring_handler_reply_t *this_);
+ZENOHC_API void z_ring_handler_reply_drop(z_moved_ring_handler_reply_t this_);
 /**
  * Borrows handler.
  */
@@ -2710,7 +2708,7 @@ ZENOHC_API bool z_ring_handler_sample_check(const struct z_owned_ring_handler_sa
 /**
  * Drops the handler and resets it to a gravestone state.
  */
-ZENOHC_API void z_ring_handler_sample_drop(struct z_owned_ring_handler_sample_t *this_);
+ZENOHC_API void z_ring_handler_sample_drop(z_moved_ring_handler_sample_t this_);
 /**
  * Borrows handler.
  */
@@ -2760,7 +2758,7 @@ enum z_congestion_control_t z_sample_congestion_control(const struct z_loaned_sa
 /**
  * Frees the memory and invalidates the sample, resetting it to a gravestone state.
  */
-ZENOHC_API void z_sample_drop(struct z_owned_sample_t *this_);
+ZENOHC_API void z_sample_drop(z_moved_sample_t this_);
 /**
  * Returns the encoding associated with the sample data.
  */
@@ -2815,8 +2813,8 @@ ZENOHC_API const struct z_timestamp_t *z_sample_timestamp(const struct z_loaned_
  * @return 0 if successful, negative error values upon failure.
  */
 ZENOHC_API
-z_error_t z_scout(struct z_owned_config_t *config,
-                  struct z_owned_closure_hello_t *callback,
+z_error_t z_scout(z_moved_config_t config,
+                  z_moved_closure_hello_t callback,
                   const struct z_scout_options_t *options);
 /**
  * Constructs the default values for the scouting operation.
@@ -2831,7 +2829,7 @@ ZENOHC_API bool z_session_check(const struct z_owned_session_t *this_);
  *
  * This will also close the session if it does not have any clones left.
  */
-ZENOHC_API void z_session_drop(struct z_owned_session_t *this_);
+ZENOHC_API void z_session_drop(z_moved_session_t this_);
 /**
  * Borrows session.
  */
@@ -2856,7 +2854,7 @@ ZENOHC_API bool z_shm_client_check(const struct z_owned_shm_client_t *this_);
  * Deletes SHM Client
  */
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
-ZENOHC_API void z_shm_client_drop(struct z_owned_shm_client_t *this_);
+ZENOHC_API void z_shm_client_drop(z_moved_shm_client_t this_);
 #endif
 /**
  * Creates a new SHM Client
@@ -2883,7 +2881,7 @@ ZENOHC_API bool z_shm_client_storage_check(const struct z_owned_shm_client_stora
  * Derefs SHM Client Storage
  */
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
-ZENOHC_API void z_shm_client_storage_drop(struct z_owned_shm_client_storage_t *this_);
+ZENOHC_API void z_shm_client_storage_drop(z_moved_shm_client_storage_t this_);
 #endif
 /**
  * Borrows SHM Client Storage
@@ -2923,7 +2921,7 @@ ZENOHC_API const unsigned char *z_shm_data(const struct z_loaned_shm_t *this_);
  * Deletes ZShm slice
  */
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
-ZENOHC_API void z_shm_drop(struct z_owned_shm_t *this_);
+ZENOHC_API void z_shm_drop(z_moved_shm_t this_);
 #endif
 /**
  * Constructs ZShm slice from ZShmMut slice
@@ -2965,7 +2963,7 @@ ZENOHC_API unsigned char *z_shm_mut_data_mut(struct z_loaned_shm_mut_t *this_);
  * Deletes ZShmMut slice
  */
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
-ZENOHC_API void z_shm_mut_drop(struct z_owned_shm_mut_t *this_);
+ZENOHC_API void z_shm_mut_drop(z_moved_shm_mut_t this_);
 #endif
 /**
  * @return the length of the ZShmMut slice
@@ -3061,7 +3059,7 @@ ZENOHC_API void z_shm_provider_defragment(const struct z_loaned_shm_provider_t *
  * Deletes SHM Provider
  */
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
-ZENOHC_API void z_shm_provider_drop(struct z_owned_shm_provider_t *this_);
+ZENOHC_API void z_shm_provider_drop(z_moved_shm_provider_t this_);
 #endif
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
 ZENOHC_API void z_shm_provider_garbage_collect(const struct z_loaned_shm_provider_t *provider);
@@ -3145,7 +3143,7 @@ ZENOHC_API const uint8_t *z_slice_data(const struct z_loaned_slice_t *this_);
 /**
  * Frees the memory and invalidates the slice.
  */
-ZENOHC_API void z_slice_drop(struct z_owned_slice_t *this_);
+ZENOHC_API void z_slice_drop(z_moved_slice_t this_);
 /**
  * Constructs an empty `z_owned_slice_t`.
  */
@@ -3177,7 +3175,7 @@ ZENOHC_API bool z_slice_map_check(const struct z_owned_slice_map_t *map);
 /**
  * Destroys the map, resetting it to its gravestone value.
  */
-ZENOHC_API void z_slice_map_drop(struct z_owned_slice_map_t *this_);
+ZENOHC_API void z_slice_map_drop(z_moved_slice_map_t this_);
 /**
  * @return the value associated with `key` (`NULL` if the key is not present in the map.).
  */
@@ -3259,7 +3257,7 @@ ZENOHC_API bool z_source_info_check(const struct z_owned_source_info_t *this_);
 /**
  * Frees the memory and invalidates the source info, resetting it to a gravestone state.
  */
-ZENOHC_API void z_source_info_drop(struct z_owned_source_info_t *this_);
+ZENOHC_API void z_source_info_drop(z_moved_source_info_t this_);
 /**
  * Returns the source_id of the source info.
  */
@@ -3291,7 +3289,7 @@ ZENOHC_API bool z_string_array_check(const struct z_owned_string_array_t *this_)
 /**
  * Destroys the string array, resetting it to its gravestone value.
  */
-ZENOHC_API void z_string_array_drop(struct z_owned_string_array_t *this_);
+ZENOHC_API void z_string_array_drop(z_moved_string_array_t this_);
 /**
  * @return the value at the position of index in the string array.
  *
@@ -3358,7 +3356,7 @@ ZENOHC_API const char *z_string_data(const struct z_loaned_string_t *this_);
 /**
  * Frees memory and invalidates `z_owned_string_t`, putting it in gravestone state.
  */
-ZENOHC_API void z_string_drop(struct z_owned_string_t *this_);
+ZENOHC_API void z_string_drop(z_moved_string_t this_);
 /**
  * Constructs an empty owned string.
  */
@@ -3403,7 +3401,7 @@ ZENOHC_API bool z_subscriber_check(const struct z_owned_subscriber_t *this_);
 /**
  * Drops subscriber and resets it to its gravestone state. Also attempts to undeclare it.
  */
-ZENOHC_API void z_subscriber_drop(struct z_owned_subscriber_t *this_);
+ZENOHC_API void z_subscriber_drop(z_moved_subscriber_t this_);
 /**
  * Returns the key expression of the subscriber.
  */
@@ -3429,7 +3427,7 @@ ZENOHC_API bool z_task_check(const struct z_owned_task_t *this_);
 /**
  * Detaches the task and releases all allocated resources.
  */
-ZENOHC_API void z_task_detach(struct z_owned_task_t *this_);
+ZENOHC_API void z_task_detach(z_moved_task_t this_);
 /**
  * Constructs a new task.
  *
@@ -3446,7 +3444,7 @@ z_error_t z_task_init(struct z_owned_task_t *this_,
 /**
  * Joins the task and releases all allocated resources
  */
-ZENOHC_API z_error_t z_task_join(struct z_owned_task_t *this_);
+ZENOHC_API z_error_t z_task_join(z_moved_task_t this_);
 /**
  * Constructs task in a gravestone state.
  */
@@ -3498,26 +3496,26 @@ ZENOHC_API uint64_t z_timestamp_npt64_time(const struct z_timestamp_t *this_);
  * @return 0 in case of success, negative error code otherwise.
  */
 ZENOHC_API
-z_error_t z_undeclare_keyexpr(struct z_owned_keyexpr_t *this_,
+z_error_t z_undeclare_keyexpr(z_moved_keyexpr_t this_,
                               const struct z_loaned_session_t *session);
 /**
  * Undeclares the given publisher, droping and invalidating it.
  *
  * @return 0 in case of success, negative error code otherwise.
  */
-ZENOHC_API z_error_t z_undeclare_publisher(struct z_owned_publisher_t *this_);
+ZENOHC_API z_error_t z_undeclare_publisher(z_moved_publisher_t this_);
 /**
  * Undeclares a `z_owned_queryable_t` and drops it.
  *
  * Returns 0 in case of success, negative error code otherwise.
  */
-ZENOHC_API z_error_t z_undeclare_queryable(struct z_owned_queryable_t *this_);
+ZENOHC_API z_error_t z_undeclare_queryable(z_moved_queryable_t this_);
 /**
  * Undeclares subscriber and drops subscriber.
  *
  * @return 0 in case of success, negative error code otherwise.
  */
-ZENOHC_API z_error_t z_undeclare_subscriber(struct z_owned_subscriber_t *this_);
+ZENOHC_API z_error_t z_undeclare_subscriber(z_moved_subscriber_t this_);
 /**
  * Returns ``true`` if `keyexpr` is valid, ``false`` if it is in gravestone state.
  */
@@ -3768,7 +3766,7 @@ ZENOHC_API
 z_error_t zc_liveliness_declare_subscriber(struct z_owned_subscriber_t *this_,
                                            const struct z_loaned_session_t *session,
                                            const struct z_loaned_keyexpr_t *key_expr,
-                                           struct z_owned_closure_sample_t *callback,
+                                           z_moved_closure_sample_t callback,
                                            struct zc_liveliness_subscriber_options_t *_options);
 /**
  * Constructs and declares a liveliness token on the network.
@@ -3797,7 +3795,7 @@ z_error_t zc_liveliness_declare_token(struct zc_owned_liveliness_token_t *this_,
 ZENOHC_API
 z_error_t zc_liveliness_get(const struct z_loaned_session_t *session,
                             const struct z_loaned_keyexpr_t *key_expr,
-                            struct z_owned_closure_reply_t *callback,
+                            z_moved_closure_reply_t callback,
                             struct zc_liveliness_get_options_t *options);
 /**
  * Constructs default value `zc_liveliness_get_options_t`.
@@ -3838,7 +3836,7 @@ void zc_session_clone(const struct z_loaned_session_t *this_,
 #if (defined(SHARED_MEMORY) && defined(UNSTABLE))
 ZENOHC_API
 z_error_t zc_shm_client_list_add_client(z_protocol_id_t id,
-                                        struct z_owned_shm_client_t *client,
+                                        z_moved_shm_client_t client,
                                         struct zc_loaned_shm_client_list_t *list);
 #endif
 /**
@@ -3962,7 +3960,7 @@ ZENOHC_API
 z_error_t ze_declare_querying_subscriber(struct ze_owned_querying_subscriber_t *this_,
                                          const struct z_loaned_session_t *session,
                                          const struct z_loaned_keyexpr_t *key_expr,
-                                         struct z_owned_closure_sample_t *callback,
+                                         z_moved_closure_sample_t callback,
                                          struct ze_querying_subscriber_options_t *options);
 /**
  * Returns ``true`` if publication cache is valid, ``false`` otherwise.

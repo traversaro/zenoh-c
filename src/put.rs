@@ -81,7 +81,7 @@ pub extern "C" fn z_put_options_default(this: &mut z_put_options_t) {
 pub extern "C" fn z_put(
     session: &z_loaned_session_t,
     key_expr: &z_loaned_keyexpr_t,
-    payload: &mut z_owned_bytes_t,
+    payload: z_moved_bytes_t,
     options: Option<&mut z_put_options_t>,
 ) -> errors::z_error_t {
     let session = session.transmute_ref();

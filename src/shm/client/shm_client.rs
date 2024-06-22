@@ -99,6 +99,6 @@ pub extern "C" fn z_shm_client_check(this: &z_owned_shm_client_t) -> bool {
 
 /// Deletes SHM Client
 #[no_mangle]
-pub extern "C" fn z_shm_client_drop(this: &mut z_owned_shm_client_t) {
+pub extern "C" fn z_shm_client_drop(this: z_moved_shm_client_t) {
     let _ = this.transmute_mut().take();
 }

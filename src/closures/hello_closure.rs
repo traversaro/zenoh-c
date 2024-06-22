@@ -31,6 +31,7 @@ pub struct z_loaned_closure_hello_t {
     _0: [usize; 3],
 }
 
+decl_move_wrapper!(z_owned_closure_hello_t, z_moved_closure_hello_t);
 decl_transmute_handle!(z_owned_closure_hello_t, z_loaned_closure_hello_t);
 
 impl z_owned_closure_hello_t {
@@ -76,9 +77,9 @@ pub extern "C" fn z_closure_hello_call(
 }
 /// Drops the closure. Droping an uninitialized closure is a no-op.
 #[no_mangle]
-pub extern "C" fn z_closure_hello_drop(closure: &mut z_owned_closure_hello_t) {
+pub extern "C" fn z_closure_hello_drop(closure: z_moved_closure_hello_t) {
     let mut empty_closure = z_owned_closure_hello_t::empty();
-    std::mem::swap(&mut empty_closure, closure);
+    std::mem::swap(&mut empty_closure, closure.ptr);
 }
 impl<F: Fn(&z_loaned_hello_t)> From<F> for z_owned_closure_hello_t {
     fn from(f: F) -> Self {

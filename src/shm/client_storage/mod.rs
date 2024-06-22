@@ -90,7 +90,7 @@ pub extern "C" fn zc_shm_client_list_loan_mut(
 #[no_mangle]
 pub extern "C" fn zc_shm_client_list_add_client(
     id: z_protocol_id_t,
-    client: &mut z_owned_shm_client_t,
+    client: z_moved_shm_client_t,
     list: &mut zc_loaned_shm_client_list_t,
 ) -> z_error_t {
     match client.transmute_mut().extract() {
@@ -171,7 +171,7 @@ pub extern "C" fn z_shm_client_storage_check(this: &z_owned_shm_client_storage_t
 
 /// Derefs SHM Client Storage
 #[no_mangle]
-pub extern "C" fn z_shm_client_storage_drop(this: &mut z_owned_shm_client_storage_t) {
+pub extern "C" fn z_shm_client_storage_drop(this: z_moved_shm_client_storage_t) {
     let _ = this.transmute_mut().take();
 }
 

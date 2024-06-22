@@ -111,7 +111,7 @@ pub extern "C" fn z_reply_err_loan(this: &z_owned_reply_err_t) -> &z_loaned_repl
 
 /// Frees the memory and resets the reply error it to its default value.
 #[no_mangle]
-pub extern "C" fn z_reply_err_drop(this: &mut z_owned_reply_err_t) {
+pub extern "C" fn z_reply_err_drop(this: z_moved_reply_err_t) {
     Inplace::drop(this.transmute_mut());
 }
 
@@ -247,7 +247,7 @@ pub unsafe extern "C" fn z_get(
     session: &z_loaned_session_t,
     key_expr: &z_loaned_keyexpr_t,
     parameters: *const c_char,
-    callback: &mut z_owned_closure_reply_t,
+    callback: z_moved_closure_reply_t,
     options: Option<&mut z_get_options_t>,
 ) -> errors::z_error_t {
     let mut closure = z_owned_closure_reply_t::empty();
@@ -306,7 +306,7 @@ pub unsafe extern "C" fn z_get(
 
 /// Frees reply, resetting it to its gravestone state.
 #[no_mangle]
-pub extern "C" fn z_reply_drop(this: &mut z_owned_reply_t) {
+pub extern "C" fn z_reply_drop(this: z_moved_reply_t) {
     Inplace::drop(this.transmute_mut())
 }
 

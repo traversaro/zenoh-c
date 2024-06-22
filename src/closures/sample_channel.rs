@@ -28,7 +28,7 @@ validate_equivalence!(
 
 /// Drops the handler and resets it to a gravestone state.
 #[no_mangle]
-pub extern "C" fn z_fifo_handler_sample_drop(this: &mut z_owned_fifo_handler_sample_t) {
+pub extern "C" fn z_fifo_handler_sample_drop(this: z_moved_fifo_handler_sample_t) {
     Inplace::drop(this.transmute_mut());
 }
 
@@ -147,7 +147,7 @@ validate_equivalence!(
 
 /// Drops the handler and resets it to a gravestone state.
 #[no_mangle]
-pub extern "C" fn z_ring_handler_sample_drop(this: &mut z_owned_ring_handler_sample_t) {
+pub extern "C" fn z_ring_handler_sample_drop(this: z_moved_ring_handler_sample_t) {
     Inplace::drop(this.transmute_mut());
 }
 

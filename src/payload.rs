@@ -43,7 +43,7 @@ extern "C" fn z_bytes_empty(this: *mut MaybeUninit<z_owned_bytes_t>) {
 /// Drops `this_`, resetting it to gravestone value. If there are any shallow copies
 /// created by `z_bytes_clone()`, they would still stay valid.
 #[no_mangle]
-extern "C" fn z_bytes_drop(this: &mut z_owned_bytes_t) {
+extern "C" fn z_bytes_drop(this: z_moved_bytes_t) {
     let this = this.transmute_mut();
     Inplace::drop(this);
 }
@@ -545,8 +545,8 @@ pub unsafe extern "C" fn z_bytes_serialize_from_string_copy(
 #[no_mangle]
 pub extern "C" fn z_bytes_serialize_from_pair(
     this: *mut MaybeUninit<z_owned_bytes_t>,
-    first: &mut z_owned_bytes_t,
-    second: &mut z_owned_bytes_t,
+    first: z_moved_bytes_t,
+    second: z_moved_bytes_t,
 ) -> z_error_t {
     let first = first.transmute_mut().extract();
 
@@ -684,7 +684,7 @@ pub extern "C" fn z_bytes_iter(
 #[allow(clippy::missing_safety_doc)]
 pub unsafe extern "C" fn z_bytes_serialize_from_shm(
     this: *mut MaybeUninit<z_owned_bytes_t>,
-    shm: &mut z_owned_shm_t,
+    shm: z_moved_shm_t,
 ) -> z_error_t {
     match shm.transmute_mut().take() {
         Some(shm) => {
@@ -714,7 +714,7 @@ pub unsafe extern "C" fn z_bytes_serialize_from_shm_copy(
 #[allow(clippy::missing_safety_doc)]
 pub unsafe extern "C" fn z_bytes_serialize_from_shm_mut(
     this: *mut MaybeUninit<z_owned_bytes_t>,
-    shm: &mut z_owned_shm_mut_t,
+    shm: z_moved_shm_mut_t,
 ) -> z_error_t {
     match shm.transmute_mut().take() {
         Some(shm) => {
@@ -815,7 +815,7 @@ extern "C" fn z_bytes_writer_null(this: *mut MaybeUninit<z_owned_bytes_writer_t>
 
 /// Drops `this_`, resetting it to gravestone value.
 #[no_mangle]
-extern "C" fn z_bytes_writer_drop(this: &mut z_owned_bytes_writer_t) {
+extern "C" fn z_bytes_writer_drop(this: z_moved_bytes_writer_t) {
     let this = this.transmute_mut();
     Inplace::drop(this);
 }

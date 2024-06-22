@@ -156,7 +156,7 @@ pub extern "C" fn zc_liveliness_declare_subscriber(
     this: *mut MaybeUninit<z_owned_subscriber_t>,
     session: &z_loaned_session_t,
     key_expr: &z_loaned_keyexpr_t,
-    callback: &mut z_owned_closure_sample_t,
+    callback: z_moved_closure_sample_t,
     _options: Option<&mut zc_liveliness_subscriber_options_t>,
 ) -> errors::z_error_t {
     let this = this.transmute_uninit_ptr();
@@ -206,7 +206,7 @@ pub extern "C" fn zc_liveliness_get_options_default(this: &mut zc_liveliness_get
 pub extern "C" fn zc_liveliness_get(
     session: &z_loaned_session_t,
     key_expr: &z_loaned_keyexpr_t,
-    callback: &mut z_owned_closure_reply_t,
+    callback: z_moved_closure_reply_t,
     options: Option<&mut zc_liveliness_get_options_t>,
 ) -> errors::z_error_t {
     let session = session.transmute_ref();

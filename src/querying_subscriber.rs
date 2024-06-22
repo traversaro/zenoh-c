@@ -123,7 +123,7 @@ pub unsafe extern "C" fn ze_declare_querying_subscriber(
     this: *mut MaybeUninit<ze_owned_querying_subscriber_t>,
     session: &z_loaned_session_t,
     key_expr: &z_loaned_keyexpr_t,
-    callback: &mut z_owned_closure_sample_t,
+    callback: z_moved_closure_sample_t,
     options: Option<&mut ze_querying_subscriber_options_t>,
 ) -> errors::z_error_t {
     let this = this.transmute_uninit_ptr();

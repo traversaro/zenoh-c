@@ -80,7 +80,7 @@ pub extern "C" fn z_closure_sample_call(
 
 /// Drops the closure. Droping an uninitialized closure is a no-op.
 #[no_mangle]
-pub extern "C" fn z_closure_sample_drop(closure: &mut z_owned_closure_sample_t) {
+pub extern "C" fn z_closure_sample_drop(closure: z_moved_closure_sample_t) {
     let mut empty_closure = z_owned_closure_sample_t::empty();
     std::mem::swap(&mut empty_closure, closure);
 }

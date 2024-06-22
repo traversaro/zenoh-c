@@ -80,7 +80,7 @@ pub extern "C" fn z_closure_reply_call(
 }
 /// Drops the closure, resetting it to its gravestone state. Droping an uninitialized closure is a no-op.
 #[no_mangle]
-pub extern "C" fn z_closure_reply_drop(closure: &mut z_owned_closure_reply_t) {
+pub extern "C" fn z_closure_reply_drop(closure: z_moved_closure_reply_t) {
     let mut empty_closure = z_owned_closure_reply_t::empty();
     std::mem::swap(&mut empty_closure, closure);
 }

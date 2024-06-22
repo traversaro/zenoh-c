@@ -85,7 +85,7 @@ pub extern "C" fn z_query_loan(this: &'static z_owned_query_t) -> &z_loaned_quer
 }
 /// Destroys the query resetting it to its gravestone value.
 #[no_mangle]
-pub extern "C" fn z_query_drop(this: &mut z_owned_query_t) {
+pub extern "C" fn z_query_drop(this: z_moved_query_t) {
     Inplace::drop(this.transmute_mut())
 }
 /// Constructs a shallow copy of the query, allowing to keep it in an "open" state past the callback's return.
@@ -215,7 +215,7 @@ pub extern "C" fn z_declare_queryable(
     this: *mut MaybeUninit<z_owned_queryable_t>,
     session: &z_loaned_session_t,
     key_expr: &z_loaned_keyexpr_t,
-    callback: &mut z_owned_closure_query_t,
+    callback: z_moved_closure_query_t,
     options: Option<&mut z_queryable_options_t>,
 ) -> errors::z_error_t {
     let this = this.transmute_uninit_ptr();
@@ -249,7 +249,7 @@ pub extern "C" fn z_declare_queryable(
 /// Returns 0 in case of success, negative error code otherwise.
 #[allow(clippy::missing_safety_doc)]
 #[no_mangle]
-pub extern "C" fn z_undeclare_queryable(this: &mut z_owned_queryable_t) -> errors::z_error_t {
+pub extern "C" fn z_undeclare_queryable(this: z_moved_queryable_t) -> errors::z_error_t {
     if let Some(qable) = this.transmute_mut().extract().take() {
         if let Err(e) = qable.undeclare().wait() {
             log::error!("{}", e);
@@ -262,7 +262,7 @@ pub extern "C" fn z_undeclare_queryable(this: &mut z_owned_queryable_t) -> error
 /// Frees memory and resets it to its gravesztone state. Will also attempt to undeclare queryable.
 #[allow(clippy::missing_safety_doc)]
 #[no_mangle]
-pub extern "C" fn z_queryable_drop(this: &mut z_owned_queryable_t) {
+pub extern "C" fn z_queryable_drop(this: z_moved_queryable_t) {
     z_undeclare_queryable(this);
 }
 
@@ -290,7 +290,7 @@ pub extern "C" fn z_queryable_check(this: &z_owned_queryable_t) -> bool {
 pub extern "C" fn z_query_reply(
     this: &z_loaned_query_t,
     key_expr: &z_loaned_keyexpr_t,
-    payload: &mut z_owned_bytes_t,
+    payload: z_moved_bytes_t,
     options: Option<&mut z_query_reply_options_t>,
 ) -> errors::z_error_t {
     let query = this.transmute_ref();
@@ -345,7 +345,7 @@ pub extern "C" fn z_query_reply(
 #[no_mangle]
 pub unsafe extern "C" fn z_query_reply_err(
     this: &z_loaned_query_t,
-    payload: &mut z_owned_bytes_t,
+    payload: z_moved_bytes_t,
     options: Option<&mut z_query_reply_err_options_t>,
 ) -> errors::z_error_t {
     let query = this.transmute_ref();

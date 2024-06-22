@@ -29,7 +29,7 @@ use zenoh_protocol::core::{whatami::WhatAmIMatcher, WhatAmI};
 pub use crate::opaque_types::z_loaned_hello_t;
 pub use crate::opaque_types::z_owned_hello_t;
 
-decl_transmute_owned!(Option<Hello>, z_owned_hello_t, z_moved_hello_t);
+decl_transmute_owned!(Option<Hello>, z_owned_hello_t, z_moved_hello);
 decl_transmute_handle!(Hello, z_loaned_hello_t);
 
 validate_equivalence!(z_owned_hello_t, z_loaned_hello_t);
@@ -37,7 +37,7 @@ validate_equivalence!(z_owned_hello_t, z_loaned_hello_t);
 /// Frees memory and resets hello message to its gravestone state.
 #[no_mangle]
 #[allow(clippy::missing_safety_doc)]
-pub unsafe extern "C" fn z_hello_drop(this: &mut z_owned_hello_t) {
+pub unsafe extern "C" fn z_hello_drop(this: z_moved_hello_t) {
     Inplace::drop(this.transmute_mut())
 }
 
@@ -145,8 +145,8 @@ pub extern "C" fn z_scout_options_default(this: &mut z_scout_options_t) {
 #[allow(clippy::missing_safety_doc)]
 #[no_mangle]
 pub extern "C" fn z_scout(
-    config: &mut z_owned_config_t,
-    callback: &mut z_owned_closure_hello_t,
+    config: z_moved_config_t,
+    callback: z_moved_closure_hello_t,
     options: Option<&z_scout_options_t>,
 ) -> errors::z_error_t {
     if cfg!(feature = "logger-autoinit") {

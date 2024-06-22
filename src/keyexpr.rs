@@ -134,7 +134,7 @@ pub extern "C" fn z_view_keyexpr_loan(this: &z_view_keyexpr_t) -> &z_loaned_keye
 
 /// Frees key expression and resets it to its gravestone state.
 #[no_mangle]
-pub extern "C" fn z_keyexpr_drop(this: &mut z_owned_keyexpr_t) {
+pub extern "C" fn z_keyexpr_drop(this: z_moved_keyexpr_t) {
     Inplace::drop(this.transmute_mut());
 }
 
@@ -468,7 +468,7 @@ pub extern "C" fn z_declare_keyexpr(
 /// @return 0 in case of success, negative error code otherwise.
 #[no_mangle]
 pub extern "C" fn z_undeclare_keyexpr(
-    this: &mut z_owned_keyexpr_t,
+    this: z_moved_keyexpr_t,
     session: &z_loaned_session_t,
 ) -> errors::z_error_t {
     let Some(kexpr) = this.transmute_mut().take() else {

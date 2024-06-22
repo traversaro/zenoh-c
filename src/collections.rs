@@ -259,7 +259,7 @@ pub unsafe extern "C" fn z_slice_wrap(
 /// Frees the memory and invalidates the slice.
 #[no_mangle]
 #[allow(clippy::missing_safety_doc)]
-pub unsafe extern "C" fn z_slice_drop(this: &mut z_owned_slice_t) {
+pub unsafe extern "C" fn z_slice_drop(this: z_moved_slice_t) {
     let this = this.transmute_mut();
     Inplace::drop(this);
 }
@@ -304,7 +304,7 @@ pub use crate::opaque_types::z_loaned_string_t;
 pub use crate::opaque_types::z_owned_string_t;
 pub use crate::opaque_types::z_view_string_t;
 
-decl_transmute_owned!(custom_inplace_init CSlice, z_owned_string_t, z_move_string_t);
+decl_transmute_owned!(custom_inplace_init CSlice, z_owned_string_t, z_moved_string_t);
 decl_transmute_view!(CSlice, z_view_string_t);
 decl_transmute_handle!(CSlice, z_loaned_string_t);
 
@@ -314,7 +314,7 @@ validate_equivalence!(z_view_string_t, z_loaned_string_t);
 /// Frees memory and invalidates `z_owned_string_t`, putting it in gravestone state.
 #[no_mangle]
 #[allow(clippy::missing_safety_doc)]
-pub unsafe extern "C" fn z_string_drop(this: &mut z_owned_string_t) {
+pub unsafe extern "C" fn z_string_drop(this: z_moved_string_t) {
     z_slice_drop(this.transmute_mut().transmute_mut());
 }
 
@@ -488,7 +488,7 @@ pub extern "C" fn z_slice_map_check(map: &z_owned_slice_map_t) -> bool {
 
 /// Destroys the map, resetting it to its gravestone value.
 #[no_mangle]
-pub extern "C" fn z_slice_map_drop(this: &mut z_owned_slice_map_t) {
+pub extern "C" fn z_slice_map_drop(this: z_moved_slice_map_t) {
     let this = this.transmute_mut();
     Inplace::drop(this);
 }
@@ -632,7 +632,7 @@ pub extern "C" fn z_string_array_check(this: &z_owned_string_array_t) -> bool {
 
 /// Destroys the string array, resetting it to its gravestone value.
 #[no_mangle]
-pub extern "C" fn z_string_array_drop(this: &mut z_owned_string_array_t) {
+pub extern "C" fn z_string_array_drop(this: z_moved_string_array_t) {
     let this = this.transmute_mut();
     Inplace::drop(this);
 }

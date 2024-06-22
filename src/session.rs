@@ -89,7 +89,7 @@ pub extern "C" fn z_open(
 #[no_mangle]
 pub extern "C" fn z_open_with_custom_shm_clients(
     this: *mut MaybeUninit<z_owned_session_t>,
-    config: &mut z_owned_config_t,
+    config: z_moved_config_t,
     shm_clients: &z_loaned_shm_client_storage_t,
 ) -> errors::z_error_t {
     let this = this.transmute_uninit_ptr();
@@ -132,7 +132,7 @@ pub extern "C" fn z_session_check(this: &z_owned_session_t) -> bool {
 /// @return 0 in  case of success, a negative value if an error occured while closing the session,
 /// the remaining reference count (number of shallow copies) of the session otherwise, saturating at i8::MAX.
 #[no_mangle]
-pub extern "C" fn z_close(this: &mut z_owned_session_t) -> errors::z_error_t {
+pub extern "C" fn z_close(this: z_moved_session_t) -> errors::z_error_t {
     let session = this.transmute_mut();
     let Some(s) = session.take() else {
         return errors::Z_EINVAL;
@@ -156,7 +156,7 @@ pub extern "C" fn z_close(this: &mut z_owned_session_t) -> errors::z_error_t {
 ///
 /// This will also close the session if it does not have any clones left.
 #[no_mangle]
-pub extern "C" fn z_session_drop(this: &mut z_owned_session_t) {
+pub extern "C" fn z_session_drop(this: z_moved_session_t) {
     let _ = this.transmute_mut().extract().take();
 }
 

@@ -210,7 +210,7 @@ pub extern "C" fn z_sample_loan(this: &z_owned_sample_t) -> &z_loaned_sample_t {
 
 /// Frees the memory and invalidates the sample, resetting it to a gravestone state.
 #[no_mangle]
-pub extern "C" fn z_sample_drop(this: &mut z_owned_sample_t) {
+pub extern "C" fn z_sample_drop(this: z_moved_sample_t) {
     Inplace::drop(this.transmute_mut());
 }
 
@@ -296,7 +296,7 @@ pub extern "C" fn z_encoding_null(this: *mut MaybeUninit<z_owned_encoding_t>) {
 
 /// Frees the memory and resets the encoding it to its default value.
 #[no_mangle]
-pub extern "C" fn z_encoding_drop(this: &mut z_owned_encoding_t) {
+pub extern "C" fn z_encoding_drop(this: z_moved_encoding_t) {
     Inplace::drop(this.transmute_mut());
 }
 
@@ -634,7 +634,7 @@ pub extern "C" fn z_source_info_loan(this: &z_owned_source_info_t) -> &z_loaned_
 
 /// Frees the memory and invalidates the source info, resetting it to a gravestone state.
 #[no_mangle]
-pub extern "C" fn z_source_info_drop(this: &mut z_owned_source_info_t) {
+pub extern "C" fn z_source_info_drop(this: z_moved_source_info_t) {
     Inplace::drop(this.transmute_mut());
 }
 

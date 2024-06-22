@@ -119,7 +119,7 @@ pub extern "C" fn z_declare_subscriber(
     this: *mut MaybeUninit<z_owned_subscriber_t>,
     session: &z_loaned_session_t,
     key_expr: &z_loaned_keyexpr_t,
-    callback: &mut z_owned_closure_sample_t,
+    callback: z_moved_closure_sample_t,
     options: Option<&mut z_subscriber_options_t>,
 ) -> errors::z_error_t {
     let this = this.transmute_uninit_ptr();
@@ -162,7 +162,7 @@ pub extern "C" fn z_subscriber_keyexpr(subscriber: &z_loaned_subscriber_t) -> &z
 /// @return 0 in case of success, negative error code otherwise.
 #[allow(clippy::missing_safety_doc)]
 #[no_mangle]
-pub extern "C" fn z_undeclare_subscriber(this: &mut z_owned_subscriber_t) -> errors::z_error_t {
+pub extern "C" fn z_undeclare_subscriber(this: z_moved_subscriber_t) -> errors::z_error_t {
     if let Some(s) = this.transmute_mut().extract().take() {
         if let Err(e) = s.undeclare().wait() {
             log::error!("{}", e);
@@ -174,7 +174,7 @@ pub extern "C" fn z_undeclare_subscriber(this: &mut z_owned_subscriber_t) -> err
 
 /// Drops subscriber and resets it to its gravestone state. Also attempts to undeclare it.
 #[no_mangle]
-pub extern "C" fn z_subscriber_drop(this: &mut z_owned_subscriber_t) {
+pub extern "C" fn z_subscriber_drop(this: z_moved_subscriber_t) {
     z_undeclare_subscriber(this);
 }
 

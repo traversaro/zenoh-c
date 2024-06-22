@@ -38,7 +38,7 @@ pub extern "C" fn z_mutex_init(this: *mut MaybeUninit<z_owned_mutex_t>) -> error
 
 /// Drops mutex and resets it to its gravestone state.
 #[no_mangle]
-pub extern "C" fn z_mutex_drop(this: &mut z_owned_mutex_t) {
+pub extern "C" fn z_mutex_drop(this: z_moved_mutex_t) {
     let _ = this.transmute_mut().extract().take();
 }
 
@@ -133,7 +133,7 @@ pub extern "C" fn z_condvar_null(this: *mut MaybeUninit<z_owned_condvar_t>) {
 
 /// Drops conditional variable.
 #[no_mangle]
-pub extern "C" fn z_condvar_drop(this: &mut z_owned_condvar_t) {
+pub extern "C" fn z_condvar_drop(this: z_moved_condvar_t) {
     let _ = this.transmute_mut().extract().take();
 }
 
@@ -211,13 +211,13 @@ pub extern "C" fn z_task_null(this: *mut MaybeUninit<z_owned_task_t>) {
 
 /// Detaches the task and releases all allocated resources.
 #[no_mangle]
-pub extern "C" fn z_task_detach(this: &mut z_owned_task_t) {
+pub extern "C" fn z_task_detach(this: z_moved_task_t) {
     let _ = this.transmute_mut().extract().take();
 }
 
 /// Joins the task and releases all allocated resources
 #[no_mangle]
-pub extern "C" fn z_task_join(this: &mut z_owned_task_t) -> errors::z_error_t {
+pub extern "C" fn z_task_join(this: z_moved_task_t) -> errors::z_error_t {
     let this = this.transmute_mut().extract().take();
     if let Some(task) = this {
         match task.join() {

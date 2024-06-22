@@ -51,6 +51,36 @@ pub(crate) trait TransmuteUninitPtr<T: Sized>: Sized {
     fn transmute_uninit_ptr(self) -> *mut std::mem::MaybeUninit<T>;
 }
 
+// pub(crate) trait InplaceUninit: Sized {
+//     // Initialize the object in place with a memcpy of the provided value. Assumes that the memory passed to the function is uninitialized
+//     fn init(this: *mut std::mem::MaybeUninit<Self>, value: Self) {
+//         let this = this as *mut Self;
+//         unsafe { std::ptr::write(this, value) };
+//     }
+
+//     // Initialize the object in place with an empty value
+//     fn empty(this: *mut std::mem::MaybeUninit<Self>);
+// }
+
+// pub(crate) trait InplaceInit: Sized {
+//     // Drop the object in place and replaces it with empty value
+//     fn drop(this: &mut Self) {
+//         let this = this as *mut Self;
+//         unsafe { std::ptr::drop_in_place(this) };
+//         Inplace::empty(this as *mut std::mem::MaybeUninit<Self>);
+//     }
+
+//     // Move the object out of this, leaving it in empty state
+//     fn extract(&mut self) -> Self {
+//         let mut out: MaybeUninit<Self> = MaybeUninit::uninit();
+//         Self::empty(&mut out);
+//         let mut out = unsafe { out.assume_init() };
+//         std::mem::swap(&mut out, self);
+//         out
+//     }
+//     // TODO: for effective inplace_init, we can provide a method that takes a closure that initializes the object in place
+// }
+
 pub(crate) trait Inplace: Sized {
     // Initialize the object in place with a memcpy of the provided value. Assumes that the memory passed to the function is uninitialized
     fn init(this: *mut std::mem::MaybeUninit<Self>, value: Self) {
@@ -139,7 +169,7 @@ macro_rules! decl_move_wrapper {
     ($c_type:ty, $move_wrapper_c_type:ident) => {
         #[repr(C)]
         pub struct $move_wrapper_c_type {
-            pub ptr: &'static mut $c_type,
+            ptr: &'static mut $c_type,
         }
     };
 }
