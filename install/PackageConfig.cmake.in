@@ -31,14 +31,16 @@ if(NOT TARGET __zenohc_shared)
         set_property(TARGET __zenohc_shared PROPERTY IMPORTED_IMPLIB "@PACKAGE_CMAKE_INSTALL_LIBDIR@/@IMPLIB@")
     endif()
 endif()
-if(NOT TARGET __zenohc_static)
-    add_library(__zenohc_static STATIC IMPORTED GLOBAL)
-    add_library(zenohc::static ALIAS __zenohc_static)
-    target_link_libraries(__zenohc_static INTERFACE @NATIVE_STATIC_LIBS@)
-    set_target_properties(__zenohc_static PROPERTIES
-        IMPORTED_LOCATION "@PACKAGE_CMAKE_INSTALL_LIBDIR@/@STATICLIB@"
-        INTERFACE_INCLUDE_DIRECTORIES "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@"
-    )
+if(@ZENOHC_INSTALL_STATIC_LIBRARY@)
+    if(NOT TARGET __zenohc_static)
+        add_library(__zenohc_static STATIC IMPORTED GLOBAL)
+        add_library(zenohc::static ALIAS __zenohc_static)
+        target_link_libraries(__zenohc_static INTERFACE @NATIVE_STATIC_LIBS@)
+        set_target_properties(__zenohc_static PROPERTIES
+            IMPORTED_LOCATION "@PACKAGE_CMAKE_INSTALL_LIBDIR@/@STATICLIB@"
+            INTERFACE_INCLUDE_DIRECTORIES "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@"
+        )
+    endif()
 endif()
 
 if(NOT TARGET zenohc::lib)

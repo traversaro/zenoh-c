@@ -1,5 +1,11 @@
 message(STATUS "zenoh-c install")
 
+declare_cache_var(ZENOHC_INSTALL_STATIC_LIBRARY TRUE BOOL "Install zenoh-c static library")
+
+if(NOT ZENOHC_INSTALL_STATIC_LIBRARY AND NOT BUILD_SHARED_LIBS)
+    message(FATAL_ERROR "ZENOHC_INSTALL_STATIC_LIBRARY and BUILD_SHARED_LIBS cannot both be set to OFF")
+endif()
+
 #
 # Installation
 # For debug configuration installs libraries with 'd' added to filename
@@ -36,10 +42,12 @@ function(install_zenohc_lib configurations property_postfix package_name)
             COMPONENT dev)
     endif()
 
-    get_target_property(staticlib_path zenohc::static IMPORTED_LOCATION_${property_postfix})
-    get_target_property(NATIVE_STATIC_LIBS zenohc::static INTERFACE_LINK_LIBRARIES)
-    get_filename_component(STATICLIB ${staticlib_path} NAME)
-    install(FILES ${staticlib_path} DESTINATION ${CMAKE_INSTALL_LIBDIR} CONFIGURATIONS ${configurations} COMPONENT dev)
+    if(ZENOHC_INSTALL_STATIC_LIBRARY)
+        get_target_property(staticlib_path zenohc::static IMPORTED_LOCATION_${property_postfix})
+        get_target_property(NATIVE_STATIC_LIBS zenohc::static INTERFACE_LINK_LIBRARIES)
+        get_filename_component(STATICLIB ${staticlib_path} NAME)
+        install(FILES ${staticlib_path} DESTINATION ${CMAKE_INSTALL_LIBDIR} CONFIGURATIONS ${configurations} COMPONENT dev)
+    endif()
 
     set(CMAKE_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/${package_name}")
 
